@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Broodscale Scouting</title>
+<meta name="description" content="Las 75 más comunes de Broodscale en Modern (mtgtop8, últimos 15 días), sus variantes y cómo orientarlas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* Tokens HQ Design System (Blockprint · Cobalto & Carmesí) */
+:root{
+  --font-display:'Archivo Black','Space Grotesk',sans-serif;
+  --font-sans:'Space Grotesk',system-ui,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+  --bg:#F3EFE4;--surface:#FFFDF7;--surface-2:#ECE7D8;--text:#17140F;--text-muted:#6B6558;--border:#17140F;--hairline:#E2DDCE;
+  --primary:#1F47FF;--on-primary:#fff;--primary-soft:#C9D5FF;--accent:#E8362D;--on-accent:#fff;
+  --success:#25B869;--success-ink:#0A2E1A;--success-soft:#C8F0D8;
+  --warning:#FFCF3F;--warning-ink:#3A2E00;--warning-soft:#FFEDB0;
+  --danger:#E8362D;--danger-ink:#fff;--danger-soft:#FBD4D1;
+  --shadow-color:#17140F;--focus-ring:#1F47FF;
+  --border-line:2px solid var(--border);
+  --shadow-sm:3px 3px 0 var(--shadow-color);--shadow:4px 4px 0 var(--shadow-color);--shadow-lg:6px 6px 0 var(--shadow-color);
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+:root[data-theme="dark"]{
+  --bg:#131210;--surface:#1E1C17;--surface-2:#26231C;--text:#F3EFE4;--text-muted:#A39C8C;--border:#F3EFE4;--hairline:#3A362D;
+  --primary:#3A5CFF;--primary-soft:#233066;--accent:#FF5A50;--on-accent:#1A0806;
+  --success:#2FCB77;--success-ink:#04170C;--success-soft:#12351F;--warning:#FFD34E;--warning-ink:#332900;--warning-soft:#40320A;
+  --danger:#FF5A50;--danger-ink:#1A0806;--danger-soft:#3A1512;--shadow-color:#000;--focus-ring:#6E86FF;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131210;--surface:#1E1C17;--surface-2:#26231C;--text:#F3EFE4;--text-muted:#A39C8C;--border:#F3EFE4;--hairline:#3A362D;
+    --primary:#3A5CFF;--primary-soft:#233066;--accent:#FF5A50;--on-accent:#1A0806;
+    --success:#2FCB77;--success-ink:#04170C;--success-soft:#12351F;--warning:#FFD34E;--warning-ink:#332900;--warning-soft:#40320A;
+    --danger:#FF5A50;--danger-ink:#1A0806;--danger-soft:#3A1512;--shadow-color:#000;--focus-ring:#6E86FF;
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--font-display);font-weight:400;letter-spacing:-.02em;line-height:1.15;text-transform:uppercase;margin:0}
+p{margin:0 0 10px;text-wrap:pretty}
+a{color:var(--primary);text-decoration:none;font-weight:600;box-shadow:inset 0 -2px 0 var(--primary)}
+a:hover{color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent)}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:2px}
+.label{font-family:var(--font-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted)}
+.num{font-variant-numeric:tabular-nums;font-family:var(--font-mono)}
+
+header{border-bottom:var(--border-line);background:var(--surface)}
+.top{max-width:1200px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.mark{background:var(--primary);color:var(--on-primary);font-family:var(--font-display);padding:6px 10px;border:var(--border-line);box-shadow:var(--shadow-sm)}
+.top h1{font-size:22px}
+.top .sp{flex:1}
+main{max-width:1200px;margin:0 auto;padding:20px 16px 60px}
+
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-sans);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.02em;padding:8px 12px;border:var(--border-line);background:var(--surface);color:var(--text);box-shadow:var(--shadow-sm);cursor:pointer;transition:transform 110ms var(--ease),box-shadow 110ms var(--ease)}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:var(--shadow)}
+.btn:active{transform:none;box-shadow:none}
+.btn--primary{background:var(--primary);color:var(--on-primary)}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.kpi{background:var(--surface);border:var(--border-line);box-shadow:var(--shadow);padding:14px}
+.kpi--hi{background:var(--primary);color:var(--on-primary)}
+.kpi--hi .label{color:inherit;opacity:.85}
+.kpi__v{font-family:var(--font-display);font-size:30px;line-height:1;margin-top:8px;font-variant-numeric:tabular-nums}
+.kpi__d{font-family:var(--font-mono);font-size:11px;margin-top:6px}
+
+.tabs{display:flex;flex-wrap:wrap;border:var(--border-line);background:var(--surface);width:fit-content;max-width:100%;margin-bottom:18px}
+.tab{font-family:var(--font-sans);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:10px 14px;border:0;border-right:var(--border-line);background:transparent;color:var(--text);cursor:pointer}
+.tab:last-child{border-right:0}
+.tab:hover{background:var(--surface-2)}
+.tab.on{background:var(--border);color:var(--bg)}
+.view{display:none}.view.on{display:block}
+
+.card{background:var(--surface);border:var(--border-line);box-shadow:var(--shadow);margin-bottom:18px}
+.card__h{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 14px;background:var(--primary);color:var(--on-primary);border-bottom:var(--border-line);font-family:var(--font-display);text-transform:uppercase;font-size:14px}
+.card__h--plain{background:var(--surface-2);color:var(--text)}
+.card__b{padding:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+
+.deck{columns:2;column-gap:28px}
+.deck .grp{break-inside:avoid;margin-bottom:12px}
+.deck .grp h4{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin:0 0 4px;font-weight:600}
+.cl{display:grid;grid-template-columns:22px 1fr auto;gap:6px;align-items:baseline;padding:2px 0;border-bottom:1px solid var(--hairline)}
+.cl b{font-family:var(--font-mono)}
+.cl .p{font-family:var(--font-mono);font-size:11px;color:var(--text-muted)}
+.side-only{columns:1}
+
+.cell{display:inline-block;padding:1px 7px;border:2px solid var(--border);font-family:var(--font-mono);font-weight:700;font-size:11px;line-height:1.4;min-width:42px;text-align:center}
+.c-good{background:var(--success);color:var(--success-ink)}
+.c-mid{background:var(--warning);color:var(--warning-ink)}
+.c-bad{background:var(--surface-2);color:var(--text-muted);border-color:var(--hairline)}
+.badge{display:inline-block;font-family:var(--font-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border:2px solid var(--border);border-radius:999px;background:var(--surface)}
+.badge--p{background:var(--primary);color:var(--on-primary)}
+.badge--a{background:var(--accent);color:var(--on-accent)}
+
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-family:var(--font-mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);padding:8px 10px;border-bottom:var(--border-line);white-space:nowrap;cursor:pointer}
+td{padding:6px 10px;border-bottom:2px solid var(--hairline);font-variant-numeric:tabular-nums;vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right}
+.dist{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);white-space:nowrap}
+.bar{display:inline-block;height:10px;background:var(--primary);border:1px solid var(--border);vertical-align:middle}
+
+.callout{border:var(--border-line);box-shadow:var(--shadow-sm);background:var(--surface);padding:12px 14px;display:flex;gap:12px;margin-bottom:14px}
+.callout__bar{width:8px;flex:none;background:var(--primary)}
+.callout--a .callout__bar{background:var(--accent)}
+.callout--g .callout__bar{background:var(--success)}
+.callout h3{font-size:15px;margin-bottom:6px}
+.prose p,.prose li{max-width:78ch}
+.prose ul{margin:0 0 10px;padding-left:20px}
+.prose li{margin-bottom:4px}
+.author{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-top:8px}
+input.f,select.f{font-family:var(--font-sans);font-size:14px;color:var(--text);background:var(--surface);border:var(--border-line);padding:8px 10px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.toast{position:fixed;bottom:18px;right:18px;background:var(--border);color:var(--bg);padding:10px 14px;font-weight:700;display:none;z-index:9}
+.err{padding:20px;border:var(--border-line);background:var(--danger-soft)}
+
+@media (max-width:820px){
+  .kpis{grid-template-columns:1fr 1fr}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .deck{columns:1}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <span class="mark">HQ</span>
+    <h1>Broodscale · Scouting</h1>
+    <span class="label" id="sub">cargando…</span>
+    <span class="sp"></span>
+    <button class="btn" id="theme" type="button">Tema</button>
+  </div>
+</header>
+
+<main>
+  <section class="kpis" id="kpis"></section>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-v="v75">La 75 más común</button>
+    <button class="tab" data-v="vvar">Variantes</button>
+    <button class="tab" data-v="vori">Cómo orientarla</button>
+    <button class="tab" data-v="vcar">Carta a carta</button>
+    <button class="tab" data-v="vlis">Listas</button>
+  </nav>
+
+  <!-- 1 · LA 75 -->
+  <section class="view on" id="v75">
+    <div class="callout">
+      <div class="callout__bar"></div>
+      <div class="prose">
+        <h3>Qué es esta lista</h3>
+        <p>No es una lista de un jugador: es la <b>75 de consenso</b>. Se reparten las 60 cartas del main y las 15 del banquillo según cuántas copias lleva de media cada carta en todas las listas de la ventana. El número de la derecha es el <b>% de listas</b> que juegan esa carta. Debajo, la lista <b>real</b> que más se le parece.</p>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card__h"><span>Main · 60</span><button class="btn" data-copy="consenso" type="button">Copiar para MTGO</button></div>
+        <div class="card__b"><div class="deck" id="c-main"></div></div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card__h"><span>Banquillo · 15</span></div>
+          <div class="card__b"><div class="deck side-only" id="c-side"></div></div>
+        </div>
+        <div class="card">
+          <div class="card__h card__h--plain"><span>La lista real más parecida</span></div>
+          <div class="card__b" id="c-modal"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · VARIANTES -->
+  <section class="view" id="vvar">
+    <div class="grid3" id="var-kpis" style="margin-bottom:18px"></div>
+    <div class="filters">
+      <span class="label">Ver la 75 típica de</span>
+      <select class="f" id="var-sel"></select>
+      <button class="btn" data-copy="variante" type="button">Copiar para MTGO</button>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card__h"><span id="var-tit">Main</span></div>
+        <div class="card__b"><div class="deck" id="v-main"></div></div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card__h"><span>Banquillo · 15</span></div>
+          <div class="card__b"><div class="deck side-only" id="v-side"></div></div>
+        </div>
+        <div class="card">
+          <div class="card__h card__h--plain"><span>En qué se separa de la 75 común</span></div>
+          <div class="card__b" id="v-diff"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · ORIENTACIÓN -->
+  <section class="view prose" id="vori">
+    <div class="card">
+      <div class="card__h"><span>Cómo funciona el mazo</span></div>
+      <div class="card__b">
+        <p><b>Rampa de Eldrazi en verde con un combo de dos cartas.</b> El combo es <b>Basking Broodscale</b> con <b>Blade of the Bloodchief</b> equipada: cada vez que la Broodscale recibe un contador +1/+1 crea una ficha Eldrazi Spawn; sacrificas la ficha (te da un maná incoloro), esa criatura muere, la Blade le pone otro contador a la Broodscale, sale otra ficha… y así sin fin. Resultado: maná incoloro infinito y una Broodscale tan grande como quieras.</p>
+        <p>Con <b>Glaring Fleshraker</b> en mesa, cada ficha que entra hace 1 daño al rival: <b>gana en el acto, sin atacar</b>. Sin ella, el maná infinito se convierte en una Broodscale gigante, Kozilek's Command o Emrakul.</p>
+        <p><b>Plan B:</b> rampear con Eldrazi Temple, Ugin's Labyrinth y Sowing Mycospawn hasta Devourer of Destiny (exilia un permanente de color al lanzarse) y Emrakul, the Promised End. <b>Urza's Saga</b> busca las piezas de 0-1 maná: la Blade, Springleaf Drum, Haywire Mite, Vexing Bauble y Soul-Guide Lantern. Ancient Stirrings y Malevolent Rumble excavan hasta la pieza que falte.</p>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card__h"><span>Lo que no se toca</span></div>
+        <div class="card__b"><p>Cartas en el 90% o más de las listas, con sus copias típicas. Si las cambias ya no juegas Broodscale, juegas otra cosa.</p><div id="o-core"></div></div>
+      </div>
+      <div class="card">
+        <div class="card__h card__h--plain"><span>Dónde está la decisión</span></div>
+        <div class="card__b"><p>Las cartas del main que unos juegan y otros no (entre el 15% y el 89% de las listas). Aquí es donde se orienta el mazo.</p><div id="o-flex"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__h"><span>Qué variante elegir</span></div>
+      <div class="card__b" id="o-var"></div>
+    </div>
+
+    <div class="card">
+      <div class="card__h"><span>El banquillo según el metajuego</span></div>
+      <div class="card__b">
+        <p>Las 15 son casi fijas en su forma (todas llevan Nature's Claim y Grafdigger's Cage), pero cada carta tapa un problema concreto. Orienta el banquillo hacia lo que más vayas a ver:</p>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>Si tu metajuego tiene…</th><th>Cartas</th><th>Contra qué</th></tr></thead>
+          <tbody id="o-sb"></tbody>
+        </table></div>
+        <p class="author" style="margin-top:12px">El % de cada carta es del banquillo, en la ventana actual.</p>
+      </div>
+    </div>
+
+    <div class="callout callout--a">
+      <div class="callout__bar"></div>
+      <div>
+        <h3>Si lo juegas contra Izzet Prowess</h3>
+        <p>Lo que te van a meter tras el banquillo: <b>Trinisphere</b> (casi todas las listas, a 2-3 copias: tus hechizos de 1 cuestan 3), <b>Vexing Bauble</b> (anula Mutagenic Growth pagada con vida) y Dismember / Warping Wail para tus criaturas. A tu favor: <b>Consign to Memory</b> contrarresta casi todo su mazo, porque Kozilek's Command es un hechizo incoloro y lo fuerte de Emrakul, Devourer of Destiny y Sowing Mycospawn es una habilidad que se dispara al lanzarlos. También corta el bucle: contrarrestar el disparo de la Broodscale o el de la Blade lo rompe.</p>
+      </div>
+    </div>
+    <p class="author">Análisis: Claude · 5-oct-2026, con las listas del 20-sep al 5-oct. Las cifras de las tablas se recalculan solas; el texto de esta pestaña no.</p>
+  </section>
+
+  <!-- 4 · CARTA A CARTA -->
+  <section class="view" id="vcar">
+    <div class="filters">
+      <input class="f" id="q" placeholder="Buscar carta…">
+      <select class="f" id="zona"><option value="main">Main</option><option value="side">Banquillo</option></select>
+      <select class="f" id="cvar"><option value="">Todas las variantes</option></select>
+      <span class="label">verde ≥90% · ámbar 50-89% · gris &lt;50%</span>
+    </div>
+    <div class="card"><div class="card__b tbl-wrap">
+      <table><thead><tr><th data-k="n">Carta</th><th data-k="tipo">Tipo</th><th class="r" data-k="pct">% listas</th><th class="r" data-k="tipico">Copias típicas</th><th class="r" data-k="media">Media</th><th>Reparto (copias: nº listas)</th></tr></thead>
+      <tbody id="t-cartas"></tbody></table>
+    </div></div>
+  </section>
+
+  <!-- 5 · LISTAS -->
+  <section class="view" id="vlis">
+    <div class="filters">
+      <input class="f" id="ql" placeholder="Jugador o torneo…">
+      <select class="f" id="lvar"><option value="">Todas las variantes</option></select>
+      <select class="f" id="lpos"><option value="">Cualquier puesto</option><option value="1">Ganadores</option><option value="8">Top 8</option></select>
+    </div>
+    <div class="card"><div class="card__b tbl-wrap">
+      <table><thead><tr><th>Fecha</th><th>Jugador</th><th>Torneo</th><th>Puesto</th><th>Variante</th><th class="r">Parecido a la 75 común</th><th></th></tr></thead>
+      <tbody id="t-listas"></tbody></table>
+    </div></div>
+  </section>
+</main>
+<div class="toast" id="toast">Copiada</div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmtFecha = (iso) => { const [y, m, d] = iso.split('-'); return `${+d}-${['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][m - 1]}-${y}`; };
+const heat = (p) => p >= 90 ? 'c-good' : p >= 50 ? 'c-mid' : 'c-bad';
+const rankNum = (r) => { const m = String(r).match(/\d+/); return m ? +m[0] : 999; };
+const deckUrl = (id) => `https://mtgtop8.com/event?d=${id}&f=MO`;
+const ORDEN = ['Criatura', 'Hechizo', 'Artefacto', 'Tierra'];
+const PLURAL = { Criatura: 'Criaturas', Hechizo: 'Hechizos', Artefacto: 'Artefactos', Tierra: 'Tierras' };
+
+// Tema: claro/oscuro, recordado por navegador
+try { const t = localStorage.getItem('bs-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+$('#theme').onclick = () => {
+  const dark = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() === '#131210';
+  const t = dark ? 'light' : 'dark';
+  document.documentElement.dataset.theme = t;
+  try { localStorage.setItem('bs-theme', t); } catch (e) {}
+};
+
+document.querySelectorAll('.tab').forEach((b) => b.onclick = () => {
+  document.querySelectorAll('.tab').forEach((x) => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.view').forEach((v) => v.classList.toggle('on', v.id === b.dataset.v));
+});
+
+let D, VAR_SEL;
+const pctOf = (zona, n) => (D[zona].find((r) => r.n === n) || {}).pct || 0;
+
+function deckHTML(list, zona, grouped = true) {
+  const row = (c) => `<div class="cl"><b>${c.q}</b><span>${esc(c.n)}</span><span class="p">${pctOf(zona, c.n)}%</span></div>`;
+  if (!grouped) return [...list].sort((a, b) => b.q - a.q || a.n.localeCompare(b.n)).map(row).join('');
+  return ORDEN.map((t) => {
+    const cs = list.filter((c) => (D.tipo[c.n] || 'Hechizo') === t).sort((a, b) => b.q - a.q || a.n.localeCompare(b.n));
+    if (!cs.length) return '';
+    return `<div class="grp"><h4>${PLURAL[t]} · ${cs.reduce((s, c) => s + c.q, 0)}</h4>${cs.map(row).join('')}</div>`;
+  }).join('');
+}
+const mtgoText = (c) => c.main.map((x) => `${x.q} ${x.n}`).join('\n') + '\n\nSideboard\n' + c.side.map((x) => `${x.q} ${x.n}`).join('\n');
+async function copy(txt) {
+  try { await navigator.clipboard.writeText(txt); } catch (e) {
+    const t = document.createElement('textarea'); t.value = txt; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove();
+  }
+  const el = $('#toast'); el.style.display = 'block'; setTimeout(() => el.style.display = 'none', 1400);
+}
+document.querySelectorAll('[data-copy]').forEach((b) => b.onclick = () => {
+  copy(mtgoText(b.dataset.copy === 'consenso' ? D.consenso : D.variantes.find((v) => v.id === VAR_SEL).consenso));
+});
+
+function render() {
+  const decks = D.decks, N = D.listas;
+  $('#sub').textContent = `mtgtop8 · ${fmtFecha(D.desde)} a ${fmtFecha(D.hasta)} · actualizado ${fmtFecha(D.generado)}`;
+  const core = D.main.filter((r) => r.pct >= 90);
+  const top8 = decks.filter((d) => rankNum(d.puesto) <= 8).length;
+  const wins = decks.filter((d) => rankNum(d.puesto) === 1).length;
+  const mtgo = decks.filter((d) => /MTGO/.test(d.evento)).length;
+  $('#kpis').innerHTML = `
+    <div class="kpi kpi--hi"><div class="label">Listas analizadas</div><div class="kpi__v">${N}</div><div class="kpi__d">últimos ${D.ventanaDias} días</div></div>
+    <div class="kpi"><div class="label">Torneos</div><div class="kpi__v">${D.eventos}</div><div class="kpi__d">${mtgo} listas de MTGO · ${N - mtgo} de papel</div></div>
+    <div class="kpi"><div class="label">Torneos ganados</div><div class="kpi__v">${wins}</div><div class="kpi__d">${top8} listas en top 8</div></div>
+    <div class="kpi"><div class="label">Núcleo fijo</div><div class="kpi__v">${core.length}</div><div class="kpi__d">cartas en el 90% o más</div></div>`;
+
+  // 1 · la 75
+  $('#c-main').innerHTML = deckHTML(D.consenso.main, 'main');
+  $('#c-side').innerHTML = deckHTML(D.consenso.side, 'side', false);
+  const m = decks.find((d) => d.id === D.modal);
+  $('#c-modal').innerHTML = `<p><b>${esc(m.jugador)}</b> · ${esc(m.evento)} · puesto ${esc(m.puesto)} · ${fmtFecha(m.fecha)}</p>
+    <p>Comparte <b>${m.simMain} de 60</b> cartas del main y <b>${m.simSide} de 15</b> del banquillo con la 75 común.</p>
+    <a href="${deckUrl(m.id)}" target="_blank" rel="noopener">Ver la lista en mtgtop8</a>`;
+
+  // 2 · variantes
+  $('#var-kpis').innerHTML = D.variantes.map((v) => `
+    <div class="kpi"><div class="label">${esc(v.nombre)}</div><div class="kpi__v">${v.pct}%</div>
+    <div class="kpi__d">${v.listas} listas · ${v.victorias} victorias · ${v.top8} en top 8 (${Math.round(v.top8 / v.listas * 100)}%)</div>
+    <div class="kpi__d" style="color:var(--text-muted)">${esc(v.regla)}</div></div>`).join('');
+  $('#var-sel').innerHTML = D.variantes.map((v) => `<option value="${v.id}">${esc(v.nombre)} (${v.listas} listas)</option>`).join('');
+  VAR_SEL = D.variantes[0].id;
+  $('#var-sel').onchange = (e) => { VAR_SEL = e.target.value; renderVar(); };
+  renderVar();
+  const opts = D.variantes.map((v) => `<option value="${v.id}">${esc(v.nombre)}</option>`).join('');
+  $('#cvar').innerHTML += opts; $('#lvar').innerHTML += opts;
+
+  // 3 · orientación (partes con datos)
+  $('#o-core').innerHTML = core.map((r) => `<div class="cl"><b>${r.tipico}</b><span>${esc(r.n)}</span><span class="cell c-good">${r.pct}%</span></div>`).join('');
+  const flex = D.main.filter((r) => r.pct >= 15 && r.pct < 90);
+  $('#o-flex').innerHTML = flex.map((r) => `<div class="cl"><b>${r.tipico}</b><span>${esc(r.n)}</span><span class="cell ${heat(r.pct)}">${r.pct}%</span></div>`).join('');
+  renderOrientacion();
+
+  renderCartas(); renderListas();
+}
+
+function renderVar() {
+  const v = D.variantes.find((x) => x.id === VAR_SEL);
+  $('#var-tit').textContent = `${v.nombre} · main 60`;
+  $('#v-main').innerHTML = deckHTML(v.consenso.main, 'main');
+  $('#v-side').innerHTML = deckHTML(v.consenso.side, 'side', false);
+  const diff = (a, b) => {
+    const mb = new Map(b.map((c) => [c.n, c.q])), ma = new Map(a.map((c) => [c.n, c.q]));
+    const names = new Set([...ma.keys(), ...mb.keys()]);
+    return [...names].map((n) => ({ n, d: (ma.get(n) || 0) - (mb.get(n) || 0) })).filter((x) => x.d).sort((x, y) => y.d - x.d);
+  };
+  const fmt = (arr) => arr.length ? arr.map((x) => `<div class="cl"><b style="color:${x.d > 0 ? 'var(--success)' : 'var(--accent)'}">${x.d > 0 ? '+' : ''}${x.d}</b><span>${esc(x.n)}</span><span></span></div>`).join('') : '<p class="label">Igual que la 75 común</p>';
+  const rep = D.decks.find((d) => d.id === v.representativa);
+  $('#v-diff').innerHTML = `<h4 class="label" style="margin:0 0 4px">Main</h4>${fmt(diff(v.consenso.main, D.consenso.main))}
+    <h4 class="label" style="margin:12px 0 4px">Banquillo</h4>${fmt(diff(v.consenso.side, D.consenso.side))}
+    <p style="margin-top:12px">Lista real que mejor la representa: <a href="${deckUrl(rep.id)}" target="_blank" rel="noopener">${esc(rep.jugador)}, ${esc(rep.evento)} (puesto ${esc(rep.puesto)})</a></p>`;
+}
+
+function renderOrientacion() {
+  const V = Object.fromEntries(D.variantes.map((v) => [v.id, v]));
+  const tasa = (v) => Math.round(v.top8 / v.listas * 100);
+  const e = V.estandar, t = V.talisman, f = V.fleshraker;
+  $('#o-var').innerHTML = `
+    <p><b>Por defecto, la Estándar.</b> Es la más jugada (${e.pct}% de las listas), la que más torneos gana (${e.victorias} de ${D.variantes.reduce((s, v) => s + v.victorias, 0)}) y mete en top 8 al ${tasa(e)}% de sus listas. Es la más equilibrada: 3 Devourer of Destiny como respuesta a lo que sea de color y una sola Glaring Fleshraker como remate, que Ancient Stirrings puede ir a buscar.</p>
+    <ul>
+      <li><b>Fleshraker (${f.pct}%, ${f.listas} listas, ${tasa(f)}% en top 8, ${f.victorias} victorias):</b> 4 Fleshraker y casi sin Devourer. Cada Fleshraker convierte el combo en daño directo y además crea fichas que rampean. Es la versión más rápida: elígela si tu metajuego es de mazos rápidos donde un turno de más te mata, y no te importa tener menos cartas grandes.</li>
+      <li><b>Talismán (${t.pct}%, ${t.listas} listas, ${tasa(t)}% en top 8, ${t.victorias} victorias):</b> sin Fleshraker; a cambio, Talisman of Resilience, 4 Ugin's Labyrinth, una Sire of Seven Deaths en el main y 2 Thought-Knot Seer en el banquillo. Es la más lenta y la de peores resultados en esta ventana. Solo la elegiría contra un metajuego lento, de control.</li>
+    </ul>
+    <p class="author">Ojo: el % de top 8 es una señal, no una prueba. mtgtop8 solo publica las listas que quedaron arriba, y cada variante se juega en torneos distintos.</p>`;
+
+  const sb = [
+    ['Cementerio (Goryo\'s, Living End, reanimación)', ['Grafdigger\'s Cage', 'Bojuka Bog'], 'Kozilek\'s Command ya limpia cementerios desde el main; Grafdigger\'s Cage además apaga Living End y la reanimación de raíz.'],
+    ['Artefactos y encantamientos (Izzet Affinity, Cori-Steel Cutter, Amulet)', ['Nature\'s Claim', 'Pithing Needle'], 'Nature\'s Claim por 1 maná y Haywire Mite del main (la busca Urza\'s Saga).'],
+    ['Hechizos baratos o gratis (Izzet Prowess, Ruby Storm, Living End)', ['Trinisphere', 'Vexing Bauble'], 'Trinisphere hace que todo cueste 3. Vexing Bauble contrarresta lo lanzado sin pagar maná: cascada, evocar pagando con cartas, Mutagenic Growth pagada con vida.'],
+    ['Habilidades que se activan (Urza\'s Saga ajena, planeswalkers, combos)', ['Pithing Needle', 'Disruptor Flute'], 'Flute nombra la carta clave del rival y la encarece; Needle apaga sus habilidades.'],
+    ['El mirror y los mazos lentos o de control', ['Thought-Knot Seer', 'Sire of Seven Deaths', 'Thief of Existence', 'Six'], 'Thief of Existence exilia la Blade of the Bloodchief rival (o un Cori-Steel Cutter). Thought-Knot Seer quita la pieza que les falta.'],
+    ['Criaturas rápidas (Boros Energy, Izzet Prowess)', ['Dismember', 'Warping Wail', 'Walking Ballista'], 'Warping Wail mata las de resistencia 1; Walking Ballista sobre todo en la variante Fleshraker.'],
+  ];
+  $('#o-sb').innerHTML = sb.map(([p, cs, why]) => `<tr><td><b>${esc(p)}</b></td><td>${cs.map((n) => `<div class="cl" style="grid-template-columns:1fr auto"><span>${esc(n)}</span><span class="cell ${heat(pctOf('side', n))}">${pctOf('side', n)}%</span></div>`).join('')}</td><td>${esc(why)}</td></tr>`).join('');
+}
+
+let SORT = { k: 'pct', dir: -1 };
+document.querySelectorAll('#vcar th[data-k]').forEach((th) => th.onclick = () => {
+  SORT = { k: th.dataset.k, dir: SORT.k === th.dataset.k ? -SORT.dir : (th.dataset.k === 'n' || th.dataset.k === 'tipo' ? 1 : -1) };
+  renderCartas();
+});
+function aggregate(decks, zona) {
+  const map = new Map();
+  for (const d of decks) for (const c of d[zona]) map.set(c.n, [...(map.get(c.n) || []), c.q]);
+  return [...map.entries()].map(([n, cs]) => {
+    const copias = {}; cs.forEach((q) => copias[q] = (copias[q] || 0) + 1);
+    const tipico = +Object.entries(copias).sort((a, b) => b[1] - a[1] || b[0] - a[0])[0][0];
+    return { n, pct: Math.round(cs.length / decks.length * 100), tipico, media: +(cs.reduce((a, b) => a + b, 0) / decks.length).toFixed(2), copias };
+  });
+}
+function renderCartas() {
+  const zona = $('#zona').value, q = $('#q').value.toLowerCase().trim(), vv = $('#cvar').value;
+  const ds = vv ? D.decks.filter((d) => d.variante === vv) : D.decks;
+  let rows = aggregate(ds, zona).map((r) => ({ ...r, tipo: D.tipo[r.n] || '' })).filter((r) => !q || r.n.toLowerCase().includes(q));
+  rows.sort((a, b) => (typeof a[SORT.k] === 'string' ? a[SORT.k].localeCompare(b[SORT.k]) : a[SORT.k] - b[SORT.k]) * SORT.dir || b.media - a.media);
+  $('#t-cartas').innerHTML = rows.map((r) => `<tr>
+    <td>${esc(r.n)}</td><td class="label">${esc(r.tipo)}</td>
+    <td class="r"><span class="cell ${heat(r.pct)}">${r.pct}%</span></td>
+    <td class="r num">${r.tipico}</td><td class="r num">${r.media.toFixed(2)}</td>
+    <td class="dist">${Object.entries(r.copias).sort((a, b) => a[0] - b[0]).map(([c, k]) => `${c}x: ${k}`).join(' · ')}</td></tr>`).join('')
+    || '<tr><td colspan="6">Nada coincide</td></tr>';
+}
+['#zona', '#cvar'].forEach((s) => $(s).onchange = renderCartas);
+$('#q').oninput = renderCartas;
+
+function renderListas() {
+  const q = $('#ql').value.toLowerCase().trim(), vv = $('#lvar').value, pos = +$('#lpos').value || 0;
+  const nom = Object.fromEntries(D.variantes.map((v) => [v.id, v.nombre]));
+  const rows = D.decks.filter((d) => (!vv || d.variante === vv) && (!pos || rankNum(d.puesto) <= pos)
+    && (!q || (d.jugador + ' ' + d.evento).toLowerCase().includes(q)))
+    .sort((a, b) => b.fecha.localeCompare(a.fecha) || rankNum(a.puesto) - rankNum(b.puesto));
+  $('#t-listas').innerHTML = rows.map((d) => `<tr>
+    <td class="num" style="white-space:nowrap">${fmtFecha(d.fecha)}</td><td>${esc(d.jugador)}</td><td>${esc(d.evento)}</td>
+    <td>${rankNum(d.puesto) === 1 ? '<span class="badge badge--a">1º</span>' : esc(d.puesto)}</td>
+    <td><span class="badge">${esc(nom[d.variante] || '')}</span></td>
+    <td class="r num">${d.simMain}/60 · ${d.simSide}/15</td>
+    <td><a href="${deckUrl(d.id)}" target="_blank" rel="noopener">mtgtop8</a></td></tr>`).join('')
+    || '<tr><td colspan="7">Nada coincide</td></tr>';
+}
+['#lvar', '#lpos'].forEach((s) => $(s).onchange = renderListas);
+$('#ql').oninput = renderListas;
+
+fetch('data/broodscale.json', { cache: 'no-store' })
+  .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then((d) => { D = d; render(); })
+  .catch((e) => { $('main').innerHTML = `<div class="err">No se pudieron cargar los datos (data/broodscale.json): ${esc(e.message)}</div>`; });
+</script>
+</body>
+</html>
